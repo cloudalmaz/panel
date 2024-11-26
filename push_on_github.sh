@@ -13,7 +13,7 @@ commit_changes() {
 й
 push_to_remote() {
   echo "Отправляю изменения на удалённый репозиторий..."
-  git push origin main > /dev/null 2>&1
+  git push origin master > /dev/null 2>&1
 }
 
 echo "Проверяю статус репозитория..."
