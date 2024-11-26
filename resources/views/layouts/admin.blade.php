@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+    <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>{{ config('app.name', 'Pterodactyl') }} - @yield('title')</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -29,7 +29,7 @@
             {!! Theme::css('vendor/sweetalert/sweetalert.min.css?t={cache-version}') !!}
             {!! Theme::css('vendor/animate/animate.min.css?t={cache-version}') !!}
             {!! Theme::css('css/pterodactyl.css?t={cache-version}') !!}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
             <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
         <div class="wrapper">
             <header class="main-header">
                 <a href="{{ route('index') }}" class="logo">
-                    <span>{{ config('app.name', 'Pterodactyl') }}</span>
+                    <span>{{ config('app.name', 'CLOA') }}</span>
                 </a>
                 <nav class="navbar navbar-static-top">
                     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -64,10 +64,10 @@
                             </li>
                             @yield("blueprint.navigation")
                             <li>
-                                <li><a href="{{ route('index') }}" data-toggle="tooltip" data-placement="bottom" title="Exit Admin Control"><i class="fa fa-server"></i></a></li>
+                                <li><a href="{{ route('index') }}" data-toggle="tooltip" data-placement="bottom" title="Выйти из административного контроля"><i class="fa fa-server"></i></a></li>
                             </li>
                             <li>
-                                <li><a href="{{ route('auth.logout') }}" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+                                <li><a href="{{ route('auth.logout') }}" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Выйти из аккаунта"><i class="fa fa-sign-out"></i></a></li>
                             </li>
                         </ul>
                     </div>
@@ -76,62 +76,73 @@
             <aside class="main-sidebar">
                 <section class="sidebar">
                     <ul class="sidebar-menu">
-                        <li class="header">BASIC ADMINISTRATION</li>
+                        <li class="header">ХОСТ</li>
                         <li class="{{ Route::currentRouteName() !== 'admin.index' ?: 'active' }}">
                             <a href="{{ route('admin.index') }}">
-                                <i class="fa fa-home"></i> <span>Overview</span>
+                                <i class="fa fa-home"></i> <span>Обзор</span>
                             </a>
                         </li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.settings') ?: 'active' }}">
-                            <a href="{{ route('admin.settings')}}">
-                                <i class="fa fa-wrench"></i> <span>Settings</span>
-                            </a>
-                        </li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.api') ?: 'active' }}">
-                            <a href="{{ route('admin.api.index')}}">
-                                <i class="fa fa-gamepad"></i> <span>Application API</span>
-                            </a>
-                        </li>
-                        <li class="header">MANAGEMENT</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.databases') ?: 'active' }}">
                             <a href="{{ route('admin.databases') }}">
-                                <i class="fa fa-database"></i> <span>Databases</span>
+                                <i class="fa fa-database"></i> <span>ДатаБазы</span>
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.locations') ?: 'active' }}">
                             <a href="{{ route('admin.locations') }}">
-                                <i class="fa fa-globe"></i> <span>Locations</span>
+                                <i class="fa fa-compass"></i> <span>Локации</span>
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.nodes') ?: 'active' }}">
                             <a href="{{ route('admin.nodes') }}">
-                                <i class="fa fa-sitemap"></i> <span>Nodes</span>
-                            </a>
-                        </li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.servers') ?: 'active' }}">
-                            <a href="{{ route('admin.servers') }}">
-                                <i class="fa fa-server"></i> <span>Servers</span>
-                            </a>
-                        </li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.subdomain') ?: 'active' }}">
-                            <a href="{{ route('admin.subdomain') }}">
-                                <i class="fa fa-globe"></i> <span>SubDomain Manager</span>
-                            </a>
-                        </li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.users') ?: 'active' }}">
-                            <a href="{{ route('admin.users') }}">
-                                <i class="fa fa-users"></i> <span>Users</span>
-                            </a>
-                        </li>
-                        <li class="header">SERVICE MANAGEMENT</li>
-                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.mounts') ?: 'active' }}">
-                            <a href="{{ route('admin.mounts') }}">
-                                <i class="fa fa-magic"></i> <span>Mounts</span>
+                                <i class="fa fa-sitemap"></i> <span>Ноды</span>
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.nests') ?: 'active' }}">
                             <a href="{{ route('admin.nests') }}">
-                                <i class="fa fa-th-large"></i> <span>Nests</span>
+                                <i class="fa fa-th-large"></i> <span>Ядры</span>
+                            </a>
+                        </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.servers') ?: 'active' }}">
+                            <a href="{{ route('admin.servers') }}">
+                                <i class="fa fa-server"></i> <span>Сервера</span>
+                            </a>
+                        </li>
+                        <li class="header">ПАНЕЛЬ</li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.users') ?: 'active' }}">
+                            <a href="{{ route('admin.users') }}">
+                                <i class="fa fa-users"></i> <span>Пользователи</span>
+                            </a>
+                        </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.extensions') ?: 'active' }}">
+                            <a href="https://panel.cloa.space/admin/extensions">
+                                <i class="fa fa-puzzle-piece"></i> <span>Расширения</span>
+                            </a>
+                        </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.statistics') ?: 'active' }}">
+                            <a href="{{ route('admin.statistics')}}">
+                                <i class="fa fa-tachometer"></i> <span>Статистика</span>
+                            </a>
+                        </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.thene') ?: 'active' }}">
+                            <a href="https://panel.cloa.space/extensions/nebula/editor/index.html">
+                                <i class="fa fa-palette"></i> <span>Тема</span>
+                            </a>
+                        </li>
+                        <li class="header">НАСТРОЙКИ</li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.api') ?: 'active' }}">
+                            <a href="{{ route('admin.api.index')}}">
+                                <i class="fa fa-gamepad"></i> <span>API приложения</span>
+                            </a>
+                        </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.settings') ?: 'active' }}">
+                            <a href="{{ route('admin.settings')}}">
+                                <i class="fa fa-wrench"></i> <span>Настройки</span>
+                            </a>
+                        </li>
+                        
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.subdomain') ?: 'active' }}">
+                            <a href="{{ route('admin.subdomain') }}">
+                                <i class="fa fa-globe"></i> <span>Домены</span>
                             </a>
                         </li>
                     </ul>
@@ -168,10 +179,10 @@
             </div>
             <footer class="main-footer">
                 <div class="pull-right small text-gray" style="margin-right:10px;margin-top:-7px;">
-                    <strong><i class="fa fa-fw {{ $appIsGit ? 'fa-git-square' : 'fa-code-fork' }}"></i></strong> {{ $appVersion }}<br />
-                    <strong><i class="fa fa-fw fa-clock-o"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s
+                    <strong><i class="fa fa-fw {{ $appIsGit ? 'fa-brands fa-git-alt' : 'fa-solid fa-code-fork' }}"></i></strong> {{ $appVersion }}<br />
+                    <strong><i class="fa-solid fa-clock"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s
                 </div>
-                Copyright &copy; 2025 - {{ date('Y') }} <a href="https://cloa.su/">CLOA Software</a>.
+                Copyright &copy; 2025 - {{ date('Y') }} <a href="https://cloa.su/">CLOA Software</a>. За основу было взято и переделано <a href="https://pterodactyl.io/">Pterodactyl</a>
             </footer>
         </div>
         @section('footer-scripts')
@@ -195,12 +206,12 @@
 
                         var that = this;
                         swal({
-                            title: 'Do you want to log out?',
+                            title: 'Вы уверены что хотите выйти?',
                             type: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d9534f',
                             cancelButtonColor: '#d33',
-                            confirmButtonText: 'Log out'
+                            confirmButtonText: 'Выйти'
                         }, function () {
                              $.ajax({
                                 type: 'POST',

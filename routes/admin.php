@@ -246,3 +246,6 @@ Route::group(['prefix' => 'subdomain'], function () {
 
     Route::delete('/delete', [Admin\SubDomainController::class, 'delete'])->name('admin.subdomain.delete');
 });
+
+Route::get('/', [Admin\BaseController::class, 'index'])->name('admin.index');
+Route::get('/statistics', [Admin\StatisticsController::class, 'index'])->name('admin.statistics');
