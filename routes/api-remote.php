@@ -19,6 +19,7 @@ Route::group(['prefix' => '/servers/{uuid}'], function () {
     Route::get('/transfer/success', [Remote\Servers\ServerTransferController::class, 'success']);
     Route::post('/transfer/failure', [Remote\Servers\ServerTransferController::class, 'failure']);
     Route::post('/transfer/success', [Remote\Servers\ServerTransferController::class, 'success']);
+    Route::post('/rules', [Remote\Servers\FirewallController::class, 'getRules']);
 });
 
 Route::group(['prefix' => '/backups'], function () {

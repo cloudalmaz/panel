@@ -145,4 +145,10 @@ Route::group([
         Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall']);
         Route::put('/docker-image', [Client\Servers\SettingsController::class, 'dockerImage']);
     });
+
+    Route::group(['prefix' => '/firewall'], function () {
+        Route::get('/', [Client\Servers\FirewallController::class, 'index']);
+        Route::post('/add', [Client\Servers\FirewallController::class, 'add']);
+        Route::delete('/remove/{id}', [Client\Servers\FirewallController::class, 'remove']);
+    });
 });
