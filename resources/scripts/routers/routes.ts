@@ -14,6 +14,7 @@ import AccountSSHContainer from '@/components/dashboard/ssh/AccountSSHContainer'
 import ActivityLogContainer from '@/components/dashboard/activity/ActivityLogContainer';
 import ServerActivityLogContainer from '@/components/server/ServerActivityLogContainer';
 import SubdomainContainer from '@/components/server/subdomain/SubdomainContainer';
+import FirewallContainer from '@/components/server/firewall/FirewallContainer';
 
 // Each of the router files is already code split out appropriately — so
 // all of the items above will only be loaded in when that router is loaded.
@@ -146,6 +147,12 @@ export default {
             permission: 'subdomain.*',
             name: 'Домены',
             component: SubdomainContainer,
+        },
+        {
+            path: '/firewall',
+            permission: 'firewall.*',
+            name: 'Брандмауэр',
+            component: FirewallContainer,
         },
     ],
 } as Routes;

@@ -21,6 +21,25 @@ import CommandRow  from '@/blueprint/components/Server/Terminal/CommandRow';
 import 'xterm/css/xterm.css';
 import styles from './style.module.css';
 
+const settings = {
+    prefix: '\x1B[1m\x1B[33m[\x1B[31mCLOA.\x1B[32mSU\x1B[33m]:\x1B[39m ',
+    diskusagecheck: 'Проверка использования дискового пространства сервера. Это может занять несколько секунд...',
+    processconfiguration: 'Обновление файлов конфигурации процесса...',
+    permcheck: 'Убедитесь, что права доступа к файлам установлены правильно. Это может занять несколько секунд...',
+    dockerpull: 'Получение образа контейнера Docker. Это может занять несколько минут...',
+    finishpull: 'Завершено получение образа контейнера Docker.',
+    firewallerr: 'Не удалось добавить правила брандмауэра на сервер. Пожалуйста, перезагрузите сервер...',
+    firewall: 'Правила брандмауэра успешно добавлены на сервер.',
+  };
+  const powersettings = {
+    starting : 'Сервер помечен как стартует',
+    started : 'Сервер помечен как запущенный',
+    offline : 'Сервер помечен как оффлайн',
+ }
+ const customsettings = {
+   'Starting minecraft server version': '',
+ };
+
 const theme = {
     background: th`colors.black`.toString(),
     cursor: 'transparent',
@@ -54,7 +73,7 @@ const terminalProps: ITerminalOptions = {
 };
 
 export default () => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pterodactyl~ \u001b[0m';
+    const TERMINAL_PRELUDE = settings.prefix;
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps }), []);
     const fitAddon = new FitAddon();
@@ -74,8 +93,27 @@ export default () => {
         z-index: 10;
     }`;
 
-    const handleConsoleOutput = (line: string, prelude = false) =>
-        terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
+    const handleConsoleOutput = (line: string, prelude = false) => {
+        Object.keys(customsettings).map((element) => {
+          line = line.replace(element, customsettings[element as keyof typeof customsettings]);
+        });
+        terminal.writeln(
+          (prelude ? TERMINAL_PRELUDE : '') +
+            line
+              .replace('\x1B[1m\x1B[33mcontainer@pterodactyl~ \x1B[0m', TERMINAL_PRELUDE)
+              .replace('\x1B[33m\x1B[1m[Pterodactyl Daemon]:\x1B[39m', TERMINAL_PRELUDE)
+              .replace('Checking server disk space usage, this could take a few seconds...', settings.diskusagecheck)
+              .replace('Updating process configuration files...', settings.processconfiguration)
+              .replace('Ensuring file permissions are set correctly, this could take a few seconds...', settings.permcheck)
+              .replace('Pulling Docker container image, this could take a few minutes to complete...', settings.dockerpull)
+              .replace('Finished pulling Docker container image', settings.finishpull)
+              .replace('Failed to add firewall rules to the server. Please restart the server...', settings.firewallerr)
+              .replace('Firewall rules successfully added to the server.', settings.firewall)
+    
+              .replace(/(?:\r\n|\r|\n)$/im, '') +
+            '\u001b[0m'
+        );
+      };
 
     const handleTransferStatus = (status: string) => {
         switch (status) {
@@ -91,8 +129,15 @@ export default () => {
             TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m'
         );
 
-    const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+    const handlePowerChangeEvent = (state: string) => {
+	 if(state === 'starting') {
+        terminal.writeln(TERMINAL_PRELUDE + powersettings.starting);
+       } else if (state === 'started') {
+        terminal.writeln(TERMINAL_PRELUDE + powersettings.started);
+       } else if (state === 'offline') {
+        terminal.writeln(TERMINAL_PRELUDE + powersettings.offline);
+       }
+    }
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {

@@ -207,6 +207,13 @@ class Permission extends Model
             ],
         ],
 
+        'firewall' => [
+            'description' => 'Manage server firewall.',
+            'keys' => [
+                'manage' => 'View, create and remove rules.',
+            ],
+        ],
+
         'activity' => [
             'description' => 'Permissions that control a user\'s access to the server activity logs.',
             'keys' => [
