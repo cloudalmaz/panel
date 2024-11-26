@@ -134,6 +134,12 @@ Route::group([
         Route::put('/variable', [Client\Servers\StartupController::class, 'update']);
     });
 
+    Route::group(['prefix' => '/subdomain'], function () {
+        Route::get('/', [Client\Servers\SubdomainController::class, 'index']);
+        Route::post('/create', [Client\Servers\SubdomainController::class, 'create']);
+        Route::delete('/delete/{id}', [Client\Servers\SubdomainController::class, 'delete']);
+    });
+
     Route::group(['prefix' => '/settings'], function () {
         Route::post('/rename', [Client\Servers\SettingsController::class, 'rename']);
         Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall']);
