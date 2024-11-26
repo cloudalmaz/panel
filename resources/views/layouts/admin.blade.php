@@ -113,6 +113,11 @@
                                 <i class="fa fa-server"></i> <span>Servers</span>
                             </a>
                         </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.subdomain') ?: 'active' }}">
+                            <a href="{{ route('admin.subdomain') }}">
+                                <i class="fa fa-globe"></i> <span>SubDomain Manager</span>
+                            </a>
+                        </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.users') ?: 'active' }}">
                             <a href="{{ route('admin.users') }}">
                                 <i class="fa fa-users"></i> <span>Users</span>
