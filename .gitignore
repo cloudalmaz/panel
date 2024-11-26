@@ -3,6 +3,7 @@
 !.env.ci
 !.env.example
 .env*
+run_count.txt
 .vagrant/*
 .vscode/*
 storage/framework/*
