@@ -200,6 +200,13 @@ class Permission extends Model
             ],
         ],
 
+        'subdomain' => [
+            'description' => 'Manage Subdomain',
+            'keys' => [
+                'manage' => 'Create / Delete subdomain for current server.',
+            ],
+        ],
+
         'activity' => [
             'description' => 'Permissions that control a user\'s access to the server activity logs.',
             'keys' => [
