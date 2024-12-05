@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Line and Distance</title>
+    <!-- Подключаем Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Задаём размеры для карты */
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- Подключаем Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Инициализация карты
+        var map = L.map('map').setView([54.747285, 55.945200], 15); // Центр карты, между двумя точками
+
+        // Добавляем слой карты (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Первая точка (54.729715, 55.961144)
+        var point1 = L.latLng(54.747285, 55.945200);
+        var marker1 = L.marker(point1).addTo(map)
+            .bindPopup("<b>Уфа</b><br>54.747285, 55.945200");
+
+        // Вторая точка (54.735381, 55.957811)
+        var point2 = L.latLng(54.731695, 55.916093);
+        var marker2 = L.marker(point2).addTo(map)
+            .bindPopup("<b>Правая белая</b><br>54.731695, 55.916093");
+
+        // Линия между точками
+        var route = L.polyline([point1, point2], { color: 'red', weight: 4 }).addTo(map);
+
+        // Расчёт расстояния между точками в метрах
+        var distance = point1.distanceTo(point2).toFixed(2); // Метод distanceTo() возвращает расстояние в метрах
+
+        // Добавляем текст с расстоянием на карту
+        var distanceLabel = L.control({ position: 'bottomleft' });
+        distanceLabel.onAdd = function() {
+            var div = L.DomUtil.create('div', 'info');
+            div.innerHTML = "<b>Расстояние:</b> " + distance + " метров";
+            return div;
+        };
+        distanceLabel.addTo(map);
+
+        // Центрируем карту, чтобы обе точки были видны
+        map.fitBounds(route.getBounds());
+    </script>
+</body>
+</html>
