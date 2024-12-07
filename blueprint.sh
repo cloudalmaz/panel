@@ -1,34 +1,21 @@
 #!/bin/bash
-# © 2023-2024 Ivy (prpl.wtf)
-
-# Learn more @ blueprint.zip
-# Source code available at github.com/blueprintframework/framework
-
-# Variable for telling Blueprint which folder Pterodactyl lives in.
+# © Ga1maz (a.cloa.su)
   FOLDER=$(realpath "$(dirname "$0")")
 
-# This stores the webserver ownership user which Blueprint uses when applying webserver permissions.
   OWNERSHIP="www-data:www-data" #;
 
-# This stores options for permissions related to running install scripts the webserver user.
   WEBUSER="www-data" #;
   USERSHELL="/bin/bash" #;
 
-# Defines the version Blueprint will display as the active one.
-  VERSION="beta-2024-08"
+  VERSION="powered by Ga1maz v1.1"
 
-# Default GitHub repository to use when upgrading Blueprint.
   REPOSITORY="BlueprintFramework/framework"
 
-
-
-# Set environment variables.
 export BLUEPRINT__FOLDER=$FOLDER
 export BLUEPRINT__VERSION=$VERSION
 export BLUEPRINT__DEBUG="$FOLDER"/.blueprint/extensions/blueprint/private/debug/logs.txt
 export NODE_OPTIONS=--openssl-legacy-provider
 
-# Check if the script is being sourced - and if so - load bash autocompletion.
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   _blueprint_completions() {
     local cur cmd opts
@@ -55,7 +42,6 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   return 0
 fi
 
-# Check for panels that are using Docker, which should have better support in the future.
 if [[ -f "/.dockerenv" ]]; then
   DOCKER="y"
   FOLDER="/app"
@@ -63,12 +49,9 @@ else
   DOCKER="n"
 fi
 
-# This has caused a bunch of errors but is just here to make sure people actually upload the
-# "blueprint" folder onto their panel when installing Blueprint. Pick your poison.
 if [[ -d "$FOLDER/blueprint" ]]; then mv "$FOLDER/blueprint" "$FOLDER/.blueprint"; fi
 
 if [[ $VERSION != "" ]]; then
-  # This function makes sure some placeholders get replaced with the current Blueprint version.
   if [[ ! -f "$FOLDER/.blueprint/extensions/blueprint/private/db/version" ]]; then
     sed -E -i "s*::v*$VERSION*g" "$FOLDER/app/BlueprintFramework/Services/PlaceholderService/BlueprintPlaceholderService.php"
     sed -E -i "s*::v*$VERSION*g" "$FOLDER/.blueprint/extensions/blueprint/public/index.html"
@@ -76,22 +59,16 @@ if [[ $VERSION != "" ]]; then
   fi
 fi
 
-# Set internal variables.
 __BuildDir=".blueprint/extensions/blueprint/private/build"
 
-# Automatically navigate to the Pterodactyl directory when running the script.
 cd "$FOLDER" || return
 
-# Import libraries.
 source scripts/libraries/parse_yaml.sh    || missinglibs+="[parse_yaml]"
 source scripts/libraries/grabenv.sh       || missinglibs+="[grabenv]"
 source scripts/libraries/logFormat.sh     || missinglibs+="[logFormat]"
 source scripts/libraries/misc.sh          || missinglibs+="[misc]"
 source scripts/libraries/configutility.sh || missinglibs+="[configutility]"
 
-
-# -config
-# usage: "cITEM=VALUE bash blueprint.sh -config"
 if [[ "$1" == "-config" ]]; then ConfigUtility; fi
 
 cdhalt() { PRINT FATAL "Attempted navigation into nonexistent directory, halting process."; exit 1; }
@@ -107,7 +84,6 @@ depend() {
     DEPEND_MISSING=true
   fi
 
-  # Check for required (both internal and external) dependencies.
   if \
   ! [ -x "$(command -v unzip)" ] ||                          # unzip
   ! [ -x "$(command -v node)" ] ||                           # node
@@ -127,7 +103,6 @@ depend() {
     DEPEND_MISSING=true
   fi
 
-  # Exit when missing dependencies.
   if [[ $DEPEND_MISSING == true ]]; then
     PRINT FATAL "Some framework dependencies are not installed or detected."
 
@@ -164,7 +139,6 @@ depend() {
   fi
 }
 
-# Assign variables for extension flags.
 assignflags() {
   F_ignorePlaceholders=false
   F_forceLegacyPlaceholders=false
@@ -190,7 +164,6 @@ assignflags() {
   if [[ ( $flags == *"developerEscalateExportScript,"*  ) || ( $flags == *"developerEscalateExportScript"  ) ]]; then F_developerEscalateExportScript=true  ;fi
 }
 
-# Adds the "blueprint" command to the /usr/local/bin directory and configures the correct permissions for it.
 placeshortcut() {
   PRINT INFO "Placing Blueprint command shortcut.."
   {
@@ -213,26 +186,22 @@ if [[ $1 != "-bash" ]]; then
     PRINT FATAL "Installation process has already been finished before, consider using the 'blueprint' command."
     exit 2
   else
-    # Only run if Blueprint is not in the process of upgrading.
     if [[ $1 != "--post-upgrade" ]]; then
-      # Print Blueprint icon with ascii characters.
       C0="\x1b[0m"
       C1="\x1b[31;43;1m"
       C2="\x1b[32;44;1m"
       C3="\x1b[34;45;1m"
       C3="\x1b[0;37;1m"
       echo -e "$C0" \
-        "\n$C4  ██$C1▌$C2▌$C3▌$C0   Blueprint Framework" \
-        "\n$C4██  ██$C1▌$C2▌$C3▌$C0 https://blueprint.zip" \
-        "\n$C4  ████$C1▌$C2▌$C3▌$C0 © 2023-2024 Ivy (prpl.wtf)\n";
+        "\n$C4  ██$C1▌$C2▌$C3▌$C0   Blueprint Framework by" \
+        "\n$C4██  ██$C1▌$C2▌$C3▌$C0 https://a.cloa.su" \
+        "\n$C4  ████$C1▌$C2▌$C3▌$C0 Almaz Ganiev (a.cloa.su / Ga1maz)\n";
     fi
 
     PRINT INFO "Searching and validating framework dependencies.."
-    depend # Check if required dependencies are installed
     
-    placeshortcut # Place Blueprint shortcut
+    placeshortcut 
 
-    # Link directories.
     PRINT INFO "Linking directories and filesystems.."
     {
       ln -s -r -T "$FOLDER/.blueprint/extensions/blueprint/public" "$FOLDER/public/extensions/blueprint"
@@ -241,10 +210,8 @@ if [[ $1 != "-bash" ]]; then
     } 2>> "$BLUEPRINT__DEBUG"
     php artisan storage:link &>> "$BLUEPRINT__DEBUG"
 
-    # Copy "Blueprint" extension page logo from assets.
     cp "$FOLDER/.blueprint/assets/Emblem/emblem.jpg" "$FOLDER/.blueprint/extensions/blueprint/assets/logo.jpg"
 
-    # Put application into maintenance.
     PRINT INPUT "Would you like to put your application into maintenance while Blueprint is installing? (Y/n)"
     read -r YN
     if [[ ( $YN == "y"* ) || ( $YN == "Y"* ) || ( $YN == "" ) ]]; then
@@ -256,7 +223,6 @@ if [[ $1 != "-bash" ]]; then
       PRINT INFO "Putting application into maintenance has been skipped."
     fi
 
-    # Flush cache.
     PRINT INFO "Flushing view, config and route cache.."
     {
       php artisan view:cache
@@ -266,7 +232,6 @@ if [[ $1 != "-bash" ]]; then
       php artisan bp:cache
     } &>> "$BLUEPRINT__DEBUG"
 
-    # Run migrations if Blueprint is not upgrading.
     if [[ ( $1 != "--post-upgrade" ) && ( $DOCKER != "y" ) ]]; then
       PRINT INPUT "Would you like to migrate your database? (Y/n)"
       read -r YN
@@ -278,35 +243,29 @@ if [[ $1 != "-bash" ]]; then
       fi
     fi
 
-    # Make sure all files have correct permissions.
     PRINT INFO "Changing Pterodactyl file ownership to '$OWNERSHIP'.."
     find "$FOLDER/" \
       -path "$FOLDER/node_modules" -prune \
       -o -exec chown "$OWNERSHIP" {} + &>> "$BLUEPRINT__DEBUG"
 
-    # Rebuild panel assets.
     PRINT INFO "Rebuilding panel assets.."
     yarn run build:production --progress
 
     if [[ $DOCKER != "y" ]]; then
-      # Sync some database values.
       PRINT INFO "Syncing Blueprint-related database values.."
       php artisan bp:sync
     fi
 
     if [[ $DOCKER != "y" ]] && [[ $MAINTENANCE == "true" ]]; then
-      # Put application into production.
       PRINT INFO "Put application into production."
       php artisan up &>> "$BLUEPRINT__DEBUG"
     fi
 
-    # Finish installation
     if [[ $1 != "--post-upgrade" ]]; then
       PRINT SUCCESS "Blueprint has completed its installation process."
     fi
 
     dbAdd "blueprint.setupFinished"
-    # Let the panel know the user has finished installation.
     sed -i "s~NOTINSTALLED~INSTALLED~g" "$FOLDER/app/BlueprintFramework/Services/PlaceholderService/BlueprintPlaceholderService.php"
     exit 0
   fi
